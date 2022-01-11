@@ -3,12 +3,21 @@ package com.d2y.demo;
 import com.d2y.demo.common.component.MyServiceBean;
 import com.d2y.demo.common.component.PeopleServiceBean;
 import com.d2y.demo.common.config.LoadPropertyConfig;
+import com.d2y.demo.common.ext.definition.Children;
+import com.d2y.demo.common.ext.definition.Parent;
+import com.d2y.demo.common.ext.importbean.Config;
+import com.d2y.demo.common.ext.importbean.scan.dao.ConfigService;
+import com.d2y.demo.common.ext.scanner.dao.FoodMapper;
 import com.d2y.demo.common.listener.EmailEvent;
 import com.d2y.demo.common.utils.SpringUtils;
 import com.d2y.demo.mybatis.entity.MybatisDemoUser;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -75,9 +84,10 @@ class SpringDemoApplicationTests {
      * 1.xml中进行配置文件引入
      * <context:property-placeholder location="classpath:config/*.properties"  file-encoding="utf-8"/>
      * 2.通过注解进行导入
+     *
      * @PropertySource(value = "properties/config.properties")
      * 3.通过定义PropertyPlaceholderConfigurer的Bean来进行加载
-     *
+     * <p>
      * 使用配置文件中的属性
      * 1.xml中使用--占位符
      * ${tenant.ids}
@@ -100,11 +110,56 @@ class SpringDemoApplicationTests {
      */
     @Test
     void testBeanPostProcessor() {
-//        MyServiceBean myServiceBean = (MyServiceBean) SpringUtils.getApplicationContext().getBean("myServiceBean");
-//        myServiceBean.peopleIntroduce();
+        //        MyServiceBean myServiceBean = (MyServiceBean) SpringUtils.getApplicationContext().getBean("myServiceBean");
+        //        myServiceBean.peopleIntroduce();
 
-        PeopleServiceBean peopleServiceBean = (PeopleServiceBean) SpringUtils.getApplicationContext().getBean("peopleServiceBean");
+        PeopleServiceBean peopleServiceBean = (PeopleServiceBean) SpringUtils.getApplicationContext()
+            .getBean("peopleServiceBean");
         peopleServiceBean.peopleIntroduce();
     }
 
+    @Test
+    void testScanner() {
+        FoodMapper foodMapper = SpringUtils.getApplicationContext().getBean(FoodMapper.class);
+        foodMapper.add("xxxxx");
+    }
+
+    @Test
+    void testDefinitions() {
+        // BeanDefinitionBuilder方式
+        DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+        BeanDefinitionBuilder children = BeanDefinitionBuilder.genericBeanDefinition(Children.class)
+            .addPropertyValue("address", "工联cc").setParentName("parent");
+
+        BeanDefinitionBuilder parent = BeanDefinitionBuilder.genericBeanDefinition(Parent.class)
+            .addPropertyValue("name", "Z").addPropertyValue("age", 25);
+
+        factory.registerBeanDefinition("children", children.getBeanDefinition());
+        factory.registerBeanDefinition("parent", parent.getBeanDefinition());
+
+        Children childrenBean = factory.getBean(Children.class);
+        System.out.println(childrenBean);
+
+        // BeanFactoryPostProcessor
+
+        // BeanDefinitionRegistryPostProcessor
+
+        // @Import 4种方式
+    }
+
+    /**
+     * @Import可以导入以下4类 普通类
+     * @Configuration配置类 实现了ImportSelector接口的类
+     * 实现了ImportBeanDefinitionRegistrar接口的类
+     */
+    @Test
+    void testImportBean() {
+//        Config config = SpringUtils.getApplicationContext().getBean(Config.class);
+//        config.print();
+
+        Map<String, ConfigService> beansOfType = SpringUtils.getBeansOfType(ConfigService.class);
+        for (ConfigService configService : beansOfType.values()) {
+            configService.print();
+        }
+    }
 }
