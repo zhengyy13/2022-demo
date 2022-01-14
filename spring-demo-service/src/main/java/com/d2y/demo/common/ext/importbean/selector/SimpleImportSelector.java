@@ -5,21 +5,19 @@
  * You shall not disclose such Confidential Information and shall use it only
  * in accordance with the terms of the license agreement you entered into with GuaHao.com.
  */
-package com.d2y.demo.common.ext.importbean.scan;
+package com.d2y.demo.common.ext.importbean.selector;
 
-import com.d2y.demo.common.ext.importbean.scan.dao.ConfigService;
+import com.d2y.demo.common.ext.importbean.selector.dao.ConfigService;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
-import org.springframework.util.CollectionUtils;
 
 /**
  * TODO

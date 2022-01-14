@@ -5,18 +5,20 @@
  * You shall not disclose such Confidential Information and shall use it only
  * in accordance with the terms of the license agreement you entered into with GuaHao.com.
  */
-package com.d2y.demo.common.ext.importbean.scan.dao;
+package com.d2y.demo.common.ext.importbean.registrar.dao;
+
+import com.d2y.demo.common.ext.importbean.registrar.dao.ConfigService;
 
 /**
  * TODO
  *
  * @author zhengyy1
  * @version V1.0
- * @since 2022-01-11 14:09
+ * @since 2022-01-11 16:45
  */
-public class ConfigE implements ConfigService {
+public class ConfigH implements ConfigService {
     @Override
     public void print() {
-        System.out.println("ConfigE...");
+        System.out.println("ConfigH...");
     }
 }

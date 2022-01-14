@@ -5,18 +5,18 @@
  * You shall not disclose such Confidential Information and shall use it only
  * in accordance with the terms of the license agreement you entered into with GuaHao.com.
  */
-package com.d2y.demo.common.ext.importbean.scan.dao;
+package com.d2y.demo.common.ext.importbean.selector;
+
+import org.springframework.context.annotation.Configuration;
 
 /**
  * TODO
  *
  * @author zhengyy1
  * @version V1.0
- * @since 2022-01-11 16:45
+ * @since 2022-01-11 14:20
  */
-public class ConfigF implements ConfigService {
-    @Override
-    public void print() {
-        System.out.println("ConfigF...");
-    }
+@Configuration
+@ConfigScan("com.d2y.demo.common.ext.importbean.selector.dao")
+public class SimpleImportSelectorConfiguration {
 }

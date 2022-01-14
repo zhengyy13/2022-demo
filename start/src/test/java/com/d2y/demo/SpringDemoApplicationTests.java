@@ -5,8 +5,7 @@ import com.d2y.demo.common.component.PeopleServiceBean;
 import com.d2y.demo.common.config.LoadPropertyConfig;
 import com.d2y.demo.common.ext.definition.Children;
 import com.d2y.demo.common.ext.definition.Parent;
-import com.d2y.demo.common.ext.importbean.Config;
-import com.d2y.demo.common.ext.importbean.scan.dao.ConfigService;
+import com.d2y.demo.common.ext.importbean.selector.dao.ConfigService;
 import com.d2y.demo.common.ext.metadata.MetaDemo;
 import com.d2y.demo.common.ext.scanner.dao.FoodMapper;
 import com.d2y.demo.common.listener.EmailEvent;
@@ -20,14 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.type.AnnotatedTypeMetadata;
-import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.ClassMetadata;
-import org.springframework.core.type.StandardAnnotationMetadata;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @SpringBootTest
 class SpringDemoApplicationTests {
@@ -166,8 +157,16 @@ class SpringDemoApplicationTests {
 //        Config config = SpringUtils.getApplicationContext().getBean(Config.class);
 //        config.print();
 
+        //ImportSelector方式
         Map<String, ConfigService> beansOfType = SpringUtils.getBeansOfType(ConfigService.class);
         for (ConfigService configService : beansOfType.values()) {
+            configService.print();
+        }
+
+        //ImportBeanDefinitionRegistrar方式
+        Map<String, com.d2y.demo.common.ext.importbean.registrar.dao.ConfigService> beansOfType1 = SpringUtils
+            .getBeansOfType(com.d2y.demo.common.ext.importbean.registrar.dao.ConfigService.class);
+        for (com.d2y.demo.common.ext.importbean.registrar.dao.ConfigService configService : beansOfType1.values()) {
             configService.print();
         }
     }
