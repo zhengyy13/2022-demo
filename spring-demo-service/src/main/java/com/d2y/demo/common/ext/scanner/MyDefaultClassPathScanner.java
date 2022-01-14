@@ -20,6 +20,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.cglib.transform.impl.AddInitTransformer;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
@@ -81,6 +83,8 @@ public class MyDefaultClassPathScanner extends ClassPathBeanDefinitionScanner {
     }
 
     protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
+        ClassMetadata classMetadata = metadataReader.getClassMetadata();
+        AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
         return metadataReader.getClassMetadata().isInterface() && metadataReader.getClassMetadata().isIndependent();
     }
 
@@ -95,6 +99,7 @@ public class MyDefaultClassPathScanner extends ClassPathBeanDefinitionScanner {
      * @return
      */
     protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+        AnnotationMetadata metadata = beanDefinition.getMetadata();
         // 原方法这里是判断是否为顶级类和是否是依赖类（即接口会被排除掉-由于我们需要将接口加进来，所以需要覆盖该方法）
         return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
     }
