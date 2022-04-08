@@ -12,13 +12,24 @@ import com.d2y.demo.common.listener.EmailEvent;
 import com.d2y.demo.common.utils.SpringUtils;
 import com.d2y.demo.mybatis.entity.MybatisDemoUser;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import sun.plugin2.message.Message;
 
 @SpringBootTest
 class SpringDemoApplicationTests {
@@ -77,6 +88,7 @@ class SpringDemoApplicationTests {
 
         System.out.println("事件发送：" + Thread.currentThread().getName());
         SpringUtils.getApplicationContext().publishEvent(new EmailEvent(user));
+        System.out.println("end~~~~~~~~~~~~~~~~");
     }
 
     /**
@@ -178,4 +190,34 @@ class SpringDemoApplicationTests {
     void testMetaData() {
         MetaDemo.main(null);
     }
+
+
+    @Test
+    void test() {
+        //String messge = "医保支付异常:SDSZYBPT续方接口调用失败：山东地纬方该病人在[990336]山东医保大健康集团医院有限公司医院存在未使用的处方(开立时间：2022-03-31 09:40:59),不能再开方";
+        String messge = "医保支付异常:SDSZYBPT续方接口调用失败：山东地纬方该病人在990336山东医保大健康集团医院有限公司医院存在未使用的处方(开立时间：2022-03-31 09:40:59),不能再开方";
+
+        String synchPrescriptionErrorKeyword = "存在未使用的处方";
+
+        if (StringUtils.isNotBlank(messge) && messge.contains(synchPrescriptionErrorKeyword)) {
+            System.out.println("山东省直特殊错误处理");
+//            System.out.println(messge.replaceAll("(\\[)(.*?)(])", "#############"));
+
+            String regex = "\\[(.*?)]";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(messge);
+            if (matcher.find()) {
+                System.out.println(matcher.group(1));
+            }
+
+            int start = messge.indexOf("[");
+            int end = messge.lastIndexOf("]");
+            if (start != -1 && end != -1) {
+                System.out.println(messge.substring(start + 1, end));
+            }
+
+        }
+
+    }
+
 }

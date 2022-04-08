@@ -9,6 +9,8 @@ package com.d2y.demo.common.listener;
 
 import com.d2y.demo.mybatis.entity.MybatisDemoUser;
 
+import java.util.concurrent.locks.LockSupport;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,5 +27,6 @@ public class EmailEventListenerImpl implements IEmailEventListener {
         System.out.println("事件处理(@EventListener)："+ Thread.currentThread().getName());
         MybatisDemoUser mybatisDemoUser = (MybatisDemoUser) event.getSource();
         System.out.println("Email事件处理中(@EventListener)：" + mybatisDemoUser.toString());
+        LockSupport.parkNanos(1000 * 1000 * 3000L);
     }
 }
