@@ -18,6 +18,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * TODO
@@ -38,6 +39,12 @@ public class PrizeFactory implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        /**
+         * 默认处理设置
+         * 多个实现对应一个处理需要报错
+         * 实现类配置校验getPrizeTypeEnum非空，
+         * 枚举对应的beanName非空
+         */
         if (!CollectionUtils.isEmpty(prizeList)) {
             for (IPrize prize : prizeList) {
                 if (null != prize.getPrizeTypeEnum()) {
@@ -57,6 +64,10 @@ public class PrizeFactory implements InitializingBean {
     //
     public IPrize getPrize(String prizeTypeName) {
         if (null == prizeMap) {
+            return null;
+        }
+        if (StringUtils.isEmpty(prizeTypeName)) {
+            //返回默认处理
             return null;
         }
         return prizeMap.get(prizeTypeName);
