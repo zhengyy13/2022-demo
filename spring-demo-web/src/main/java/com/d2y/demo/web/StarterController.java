@@ -8,13 +8,11 @@
 package com.d2y.demo.web;
 
 import com.d2y.annotation.Log;
+import com.d2y.annotation.Whitelist;
 import com.d2y.demo.api.model.UserModel;
-
-import java.lang.reflect.Method;
-
+import com.d2y.enums.WhitelistTypeEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +35,15 @@ public class StarterController {
         userModel.setName("xxxx");
         userModel.setAge(18);
         return userModel;
+    }
+
+    @Whitelist(key = "#userId", type = WhitelistTypeEnum.USER, tip = "{\"code\":\"1001\",\"message\":\"无权限\"}")
+    @GetMapping("/testWhtielistStarter")
+    public String testWhtielistStarter(@RequestParam Long userId) {
+        UserModel userModel = new UserModel();
+        userModel.setId(1L);
+        userModel.setName("xxxx");
+        userModel.setAge(18);
+        return userModel.toString();
     }
 }

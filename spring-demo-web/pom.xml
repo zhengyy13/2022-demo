@@ -35,6 +35,11 @@
             <groupId>com.d2y</groupId>
             <artifactId>log-spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.d2y</groupId>
+            <artifactId>whitelist-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
