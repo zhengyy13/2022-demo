@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.d2y</groupId>
-            <artifactId>d2y-spring-boot-starter</artifactId>
+            <artifactId>log-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 

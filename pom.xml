@@ -54,7 +54,7 @@
             </dependency>
             <dependency>
                 <groupId>com.d2y</groupId>
-                <artifactId>d2y-spring-boot-starter</artifactId>
+                <artifactId>log-spring-boot-starter</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
