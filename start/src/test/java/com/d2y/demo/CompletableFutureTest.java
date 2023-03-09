@@ -10,6 +10,7 @@ package com.d2y.demo;
 import com.sun.xml.internal.ws.util.CompletedFuture;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -616,5 +617,19 @@ public class CompletableFutureTest {
             .thenApply(list -> list.stream().filter(u -> Objects.isNull(u)).collect(Collectors.toList()));
 
         System.out.println(listCompletableFuture1.get());
+    }
+
+    @Test
+    public void test01() {
+        System.out.println("aaa");
+        CompletableFuture.runAsync(() -> {
+            System.out.println("xxxxxxxxxxxxxxxxxxxxx");
+            int a = 1/0;
+        }).whenComplete((aVoid, throwable) -> {
+            if (throwable != null) {
+                System.out.println(throwable.getMessage());
+            }
+        });
+        System.out.println("bbb");
     }
 }
