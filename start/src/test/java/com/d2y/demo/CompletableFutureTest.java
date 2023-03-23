@@ -51,7 +51,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (false) {
+            if (true) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + " exit,time->" + System.currentTimeMillis());
@@ -80,7 +80,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (false) {
+            if (true) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + " exit,time->" + System.currentTimeMillis());
@@ -107,7 +107,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (false) {
+            if (true) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + " exit,time->" + System.currentTimeMillis());
@@ -230,7 +230,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (false) {
+            if (true) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + "job1 exit,time->" + System.currentTimeMillis());
@@ -241,7 +241,7 @@ public class CompletableFutureTest {
         CompletableFuture<Double> cf2 = cf.exceptionally((param) -> {
             System.out.println(Thread.currentThread() + " start,time->" + System.currentTimeMillis());
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
             }
             System.out.println("error stack trace->");
@@ -282,7 +282,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (false) {
+            if (true) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + "job1 exit,time->" + System.currentTimeMillis());
@@ -324,7 +324,7 @@ public class CompletableFutureTest {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            if (true) {
+            if (false) {
                 throw new RuntimeException("test");
             } else {
                 System.out.println(Thread.currentThread() + "job1 exit,time->" + System.currentTimeMillis());
@@ -425,6 +425,7 @@ public class CompletableFutureTest {
 
         System.out.println("main thread start cf.get(),time->" + System.currentTimeMillis());
         //等待子任务执行完成
+        //为什么这里cf的结果打印会等到job5执行结束?上述都是同步执行，会在原现场里继续执行；如果改成异步就会返回
         System.out.println("cf run result->" + cf.get());
         System.out.println("main thread start cf5.get(),time->" + System.currentTimeMillis());
         System.out.println("cf5 run result->" + cf5.get());
@@ -433,7 +434,7 @@ public class CompletableFutureTest {
 
     /**
      * applyToEither / acceptEither / runAfterEither
-     * applyToEither会将已经执行完成的任务的执行结果作为方法入参，并有返回值；
+     * applyToEither会将已经执行完成的任务的执行结果作为方法入参，并有返回值；方法作用是返回两个任务中最先完成的任务结果
      * acceptEither同样将已经执行完成的任务的执行结果作为方法入参，但是没有返回值；
      * runAfterEither没有方法入参，也没有返回值。
      * 注意两个任务中只要有一个执行异常，则将该异常信息作为指定任务的执行结果
@@ -541,7 +542,7 @@ public class CompletableFutureTest {
         });
         //allof等待所有任务执行完成才执行cf4，如果有一个任务异常终止，则cf4.get时会抛出异常，都是正常执行，cf4.get返回null
         //anyOf是只有一个任务执行完成，无论是正常执行或者执行异常，都会执行cf4，cf4.get的结果就是已执行完成的任务的执行结果
-        CompletableFuture cf4 = CompletableFuture.anyOf(cf, cf2, cf3).whenComplete((a, b) -> {
+        CompletableFuture cf4 = CompletableFuture.allOf(cf, cf2, cf3).whenComplete((a, b) -> {
             if (b != null) {
                 System.out.println("error stack trace->");
                 b.printStackTrace();
